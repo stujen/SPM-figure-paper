@@ -1,0 +1,36 @@
+
+Parameters for the finalised SPM figure 1 code given to IPCC
+
+cdf	TCR	ECS	TCRE	rf_aero_2011	rf_tot_2011	sf_gauss	sf_aero		r0	rC	rT
+0.17	1.00	1.50	0.92	-0.58		3.11		1.39		0.65		46.16	0.000	0.000
+0.50	1.75	2.60	1.50	-0.94		2.25		1.0		1.05		31.88	0.018	4.099
+0.83	2.50	4.50	2.05	-0.81		1.88		0.61		0.90		22.56	0.026	5.802
+0.33	1.42	2.03	1.26	-0.89		2.52		1.17		0.99		37.77	0.012	2.694
+0.67	2.08	3.32	1.71	-0.91		2.06		0.83		1.01		27.01	0.022	5.019
+
+
+cdf is the sampling point of the CDF distribution :-> 0.5 = mean value, then have central 1/3rd and central 2/3rds of distribution.
+
+TCR and ECS distributions are sampled to find the most likely value and the likely ranges (central tercile and central 2/3rds), representing the values of TCR and ECS distribution at the given CDF values.
+
+TCRE is calculated with the given carbon cycle parameters, and TCR/ECS values. 1%/yr concentration increase scenario run through FaIR and TCRE calculated from output temperature vs cumulative ems. 
+
+sf_gauss are the gaussian non-CO2 forcing scaling factors. They are scaled to span the AR5 5-95% forcing likely range for each gaussian non-CO2 forcing component, assuming a ±20% uncertainty in the AR5 forcing values. This is achieved by mapping the cdf values to a Gaussian distribution (centred at 1 and anti-correlated with TCR).
+
+sf_aero are the aerosol non-CO2 forcing scaling factors. They are scaled so they contribute the correct quantity of the total warming. I.e. run through FaIR all forcing minus aerosols, and run only aerosol forcing through FaIR. Then (total warming from all forcing minus warming from all forcing without aerosols) / (warming from aerosols only) gives the sf_aero value. 
+
+r0, rC and rT are the fitted parameters for the FaIR carbon cycle. They are defined as:
+		r0 = s * r0_start
+		rC = s * gamma * rC_start
+		rT = s * gamma * rT_start
+	where r0_start = 35.0, rC_start = 0.02 and rT_start = 4.5, are initial guesses of the parameters.
+Gamma is a parameter used to represent the ratio of r0 to rC/rT parameters - and is scaled to match the CMIP5 reported range, i.e. a gaussian that spans CMIP5 rC:r0 ratio with central value of 1. rC and rT are kept with constant ratio. 
+Parameter s is found by fitting to require the faIR model to return reported GCP emissions in 2017, from RCP8.5 forcing inputs and relevant TCR/ECS values.
+
+rf_aero_2011 is the scaled RF for RCP8.5 aerosol RF timeseries in 2011 (scaled with sf_aero).
+
+rf_tot_2011 is the total RF from RCP8.5 RF timeseries in 2011, where aero RF is scaled with sf_aero and gaussian RF forcing sources are scaled with sf_gauss. 
+
+
+
+These described methods for scaling are as are presented in Millar et al. (2017) paper. For a more full description see the methods of this paper. ("Emission budgets and pathways consistent with limiting warming to 1.5◦C" - Millar et al. (2017)).
